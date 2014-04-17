@@ -5,12 +5,14 @@ import play.api.db.slick.{Profile, Session}
 import play.api.db.slick.Config.driver.simple._
 import scala.slick.lifted
 
-case class User(id: Option[Int], name: String)
+case class User(id: Option[Int], name: String, email: String, password: String)
 
 class Users(tag: Tag) extends Table[User](tag, "users") {
-  def id   = column[Int]("id", O.PrimaryKey, O.AutoInc)
-  def name = column[String]("name", O.NotNull)
-  def * = (id.?, name) <> (User.tupled, User.unapply _)
+  def id       = column[Int]("id", O.PrimaryKey, O.AutoInc)
+  def name     = column[String]("name", O.NotNull)
+  def email    = column[String]("email", O.NotNull)
+  def password = column[String]("password", O.NotNull)
+  def * = (id.?, name, email, password) <> (User.tupled, User.unapply _)
 }
 
 object Users extends DAO {
@@ -20,6 +22,10 @@ object Users extends DAO {
 
   def findByName(name: String)(implicit s: Session): Option[User] = {
     Users filter { _.name === name } firstOption
+  }
+
+  def findByEmail(email: String)(implicit s: Session): Option[User] = {
+    Users filter { _.email === email } firstOption
   }
 
   def insert(user: User)(implicit s: Session) {

@@ -42,7 +42,7 @@ object Application extends Controller {
       import java.io.File
         val contentType = picture.contentType
         val imageFile = Images.findById(id)
-        DB.withSession {implicit session =>
+        DB.withSession { implicit session =>
           val image = imageForm.bindFromRequest
           if (image.hasErrors) Redirect(routes.Application.select)
           else contentType match {

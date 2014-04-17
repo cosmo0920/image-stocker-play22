@@ -2,13 +2,20 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+# Authentication
+GET     /login                      controllers.Auth.login
+POST    /login                      controllers.Auth.authenticate
+GET     /logout                     controllers.Auth.logout
+GET     /signup                     controllers.Auth.signup
+POST    /signup                     controllers.Auth.register
+
 # Home page
 GET     /                           controllers.Application.index
-GET     /img/select                   controllers.Application.select
-POST    /img/upload                   controllers.Application.upload
-GET     /img/:id                      controllers.Application.show(id: Int)
-POST    /img/:id/delete               controllers.Application.delete(id: Int)
-GET     /img/:id/edit                 controllers.Application.edit(id: Int)
-POST    /img/:id/update               controllers.Application.update(id: Int)
+GET     /img/select                 controllers.Application.select
+POST    /img/upload                 controllers.Application.upload
+GET     /img/:id                    controllers.Application.show(id: Int)
+POST    /img/:id/delete             controllers.Application.delete(id: Int)
+GET     /img/:id/edit               controllers.Application.edit(id: Int)
+POST    /img/:id/update             controllers.Application.update(id: Int)
 # Map static resources from the /public folder to the /assets URL path
 GET     /static/*file               controllers.Assets.at(path="/public", file)

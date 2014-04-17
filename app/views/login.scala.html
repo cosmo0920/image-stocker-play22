@@ -1,0 +1,56 @@
+@(form: Form[(String, String)])(implicit flash: Flash)
+
+@import helper.twitterBootstrap._
+
+@main("Login") {
+<div class="main-content">
+  <div class="container">
+    <div class="row show-grid">
+      <div class="col-md-12" data-original-title="">
+        <legend>Login</legend>
+        @helper.form(
+        routes.Auth.authenticate,
+        'class -> "form-horizontal"
+        ) {
+        <fieldset>
+          @if(form.hasErrors) {
+          <div class="alert alert-block alert-error">
+            There are problems.
+          </div>
+          }
+
+          @flash.get("success").map { message =>
+          <div class="alert alert-block alert-info">
+            @message
+          </div>
+          }
+
+          @helper.inputText(
+          form("email"),
+          'type -> "email",
+          'placeholder -> "default@example.com",
+          '_label -> "Email Address",
+          '_error -> form.globalError
+          )
+          @helper.inputPassword(
+          form("password"),
+          'placeholder -> "secret",
+          '_label -> "Password",
+          '_error -> form.globalError
+          )
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" id="loginbutton" class="btn">Login</button>
+            </div>
+          </div>
+          }
+        </fieldset>
+
+        <div class="well well-small">
+          Don't you have an account? <a href="@routes.Auth.signup">Let's sign up here</a>.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
