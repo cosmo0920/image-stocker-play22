@@ -1,0 +1,25 @@
+@(image: Image)
+@import helper._
+
+@main("画像") {
+<div class="main-content">
+    <div class="container">
+        <div class="row show-grid">
+            <div class="col-md-12" data-original-title="">
+            <p>Image detail:</p>
+            <img src="@routes.Assets.at("picture/" + image.filename)" width="450">
+            <ul>
+                <li>@image.id.get.toString()</li>
+                <li>@image.name.toString()</li>
+                <li>@image.filename.toString()</li>
+                <li>@image.description.toString()</li>
+            </ul>
+            @form(routes.Application.delete(image.id.get), 'class -> "topRight") {
+            <input type="submit" value="Delete this image" class="btn btn-danger"  onclick="return confirm('Are you sure?');"> or
+            <a href="@routes.Application.index" class="btn btn-default">Cancel</a>
+            }
+            </div>
+        </div>
+    </div>
+</div>
+}

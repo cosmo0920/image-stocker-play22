@@ -1,0 +1,23 @@
+@(id:Int, form: Form[models.Image])
+
+@import helper.twitterBootstrap._
+
+@main("編集") {
+<div class="main-content">
+    <div class="container">
+        <div class="row show-grid">
+            <div class="col-md-12" data-original-title="">
+                @helper.form(action = routes.Application.update(id), 'enctype -> "multipart/form-data") {
+                    @helper.inputFile(form("picture"))
+                    @helper.inputText(form("name"))
+                    @helper.textarea(form("description"))
+                    @helper.inputText(form("filename"))
+                    <input type="submit" value="Update" class="btn btn-primary">
+                }
+                <hr>
+                <a href="@routes.Application.index" class="btn btn-default">Top</a>
+            </div>
+        </div>
+    </div>
+</div>
+}

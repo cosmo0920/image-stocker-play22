@@ -1,0 +1,17 @@
+@(message: String)
+
+@import helper.twitterBootstrap._
+
+@main("Done") {
+<div class="main-content">
+    <div class="container">
+        <div class="row show-grid">
+            <div class="col-md-12" data-original-title="">
+                @message
+                <hr>
+                <a href="@routes.Application.index" class="btn btn-default">Top</a>
+            </div>
+        </div>
+    </div>
+</div>
+}
