@@ -51,13 +51,7 @@ object Application extends Controller with Secured {
           val image = imageForm.bindFromRequest
           if (image.hasErrors) Redirect(routes.Application.select)
           else contentType match {
-            case Some("image/jpeg") => picture.ref.moveTo(new File(s"public/picture/${image.get.filename}"), true)
-              Images.update(id, image.get)
-              if (image.get.filename != imageFile.get.filename) {
-                new File(s"public/picture/${imageFile.get.filename}").delete
-              }
-              Redirect(routes.Application.index)
-            case Some("image/png") => picture.ref.moveTo(new File(s"public/picture/${image.get.filename}"), true)
+            case Some("image/jpeg") | Some("image/png") | Some("image/gif") => picture.ref.moveTo(new File(s"public/picture/${image.get.filename}"), true)
               Images.update(id, image.get)
               if (image.get.filename != imageFile.get.filename) {
                 new File(s"public/picture/${imageFile.get.filename}").delete
@@ -106,12 +100,9 @@ object Application extends Controller with Secured {
         val image = imageForm.bindFromRequest
         if (image.hasErrors) Redirect(routes.Application.select)
         else contentType match {
-          case Some("image/jpeg") => picture.ref.moveTo(new File(s"public/picture/${image.get.filename}"))
+          case Some("image/jpeg") | Some("image/png") | Some("image/gif") => picture.ref.moveTo(new File(s"public/picture/${image.get.filename}"))
             Images.insert(image.get)
-            Ok(views.html.done("jpeg File uploaded"))
-          case Some("image/png") => picture.ref.moveTo(new File(s"public/picture/${image.get.filename}"))
-            Images.insert(image.get)
-            Ok(views.html.done("png File uploaded"))
+            Ok(views.html.done(s"${image.get.filename} uploaded"))
           case Some(s) => Ok(views.html.error(s"Invalid file format ${s}"))
           case None => Ok(views.html.error("Invalid file format"))
         }
