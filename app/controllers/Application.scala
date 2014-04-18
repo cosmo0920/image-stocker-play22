@@ -9,7 +9,7 @@ import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
 
-object Application extends Controller {
+object Application extends Controller with Secured {
   val imageForm = Form(
     mapping(
       "id"   -> optional(number),
@@ -25,16 +25,25 @@ object Application extends Controller {
     Ok(views.html.index(imagesNum, images))
   }
 
-  def show(id: Int) = DBAction { implicit rs =>
-    Images.findById(id).map { image =>
-      Ok(views.html.show(image))
-    }.getOrElse(NotFound(views.html.error("Cannot Find Image")))
+  def show(id: Int) = IsAuthenticated { implicit rs =>
+    username =>
+      DB.withSession { implicit rs =>
+        Images.findById(id).map {
+          image =>
+            Ok(views.html.show(image))
+          }.getOrElse(NotFound(views.html.error("Cannot Find Image")))
+        }
   }
 
-  def edit(id :Int) = DBAction { implicit rs =>
-    Images.findById(id).map { image =>
-      Ok(views.html.edit(id, imageForm.fill(image)))
-    }.getOrElse(NotFound(views.html.error("Cannot Find Image")))
+  def edit(id :Int) = IsAuthenticated { implicit rs =>
+    username =>
+      DB.withSession {
+        implicit rs =>
+          Images.findById(id).map {
+            image =>
+              Ok(views.html.edit(id, imageForm.fill(image)))
+          }.getOrElse(NotFound(views.html.error("Cannot Find Image")))
+      }
   }
 
   def update(id: Int) = DBAction(parse.multipartFormData) { implicit request =>
@@ -68,17 +77,28 @@ object Application extends Controller {
       }
   }
 
-  def delete(id: Int) = DBAction { implicit rs =>
-    import java.io.File
-    val image = Images.findById(id)
-    new File(image.get.filename).delete
-    Images.delete(id)
-    Redirect(routes.Application.index)
+  def delete(id: Int) = IsAuthenticated { implicit rs =>
+    username =>
+    DB.withSession {
+      implicit rs =>
+        import java.io.File
+        val image = Images.findById(id)
+        new File(s"public/picture/${image.get.filename}").delete
+        Images.delete(id)
+        Redirect(routes.Application.index)
+    }
   }
 
-  def select  = DBAction { implicit request =>
-    val image = imageForm.bindFromRequest
-    Ok(views.html.upload(image))
+  def select  = IsAuthenticated {
+     username =>
+       implicit request =>
+         val image = imageForm.bindFromRequest
+         Ok(views.html.upload(image))
+     }
+
+  def list = DBAction { implicit rs =>
+    val images = Images.findAll().list
+    Ok(views.html.gallery(images))
   }
 
   def upload = DBAction(parse.multipartFormData){ implicit request =>

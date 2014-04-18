@@ -7,9 +7,6 @@ import play.api.data.Forms._
 import models._
 import play.api.db.slick._
 import play.api.Play.current
-import play.api.Configuration
-
-import models.User
 
 trait Secured {
 
@@ -21,6 +18,11 @@ trait Secured {
     Security.Authenticated(username, onUnauthorized) { user =>
       Action(request => f(user)(request))
     }
+  }
+
+  def IsAuthenticated(f: => String => Request[AnyContent] => Result) =
+    Security.Authenticated(username, onUnauthorized) { user =>
+      Action(request => f(user)(request))
   }
 
   def withUser(f: User => Request[AnyContent] => Result) = withAuth {
