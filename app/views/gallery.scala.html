@@ -1,0 +1,21 @@
+@(images: List[Image])
+@main("ギャラリー") {
+<div class="main-content">
+  <div class="container">
+    <div class="row show-grid">
+      <div class="col-md-12" data-original-title="">
+	<div class="container">
+	  <div id="links">
+	    @for(img <- images) {
+              <a href="@routes.Assets.at("picture/" + img.filename)" title="(img.filename)" data-gallery>
+	        <img src="@routes.Assets.at("picture/" + img.filename)" alt="(img.filename)" width="300">
+	      </a>
+	      }
+	  </div>
+	</div>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+}

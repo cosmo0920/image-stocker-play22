@@ -11,6 +11,7 @@ POST    /signup                     controllers.Auth.register
 
 # Home page
 GET     /                           controllers.Application.index
+GET     /img/list                   controllers.Application.list
 GET     /img/select                 controllers.Application.select
 POST    /img/upload                 controllers.Application.upload
 GET     /img/:id                    controllers.Application.show(id: Int)
