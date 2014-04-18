@@ -14,10 +14,7 @@
                 <li>@image.filename.toString()</li>
                 <li>@image.description.toString()</li>
             </ul>
-            @form(routes.Application.delete(image.id.get), 'class -> "topRight") {
-            <input type="submit" value="Delete this image" class="btn btn-danger"  onclick="return confirm('Are you sure?');"> or
-            <a href="@routes.Application.index" class="btn btn-default">Cancel</a>
-            }
+            <a href="@routes.Application.index" class="btn btn-default">Back</a>
             </div>
         </div>
     </div>

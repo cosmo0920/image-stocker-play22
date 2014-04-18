@@ -25,14 +25,10 @@ object Application extends Controller with Secured {
     Ok(views.html.index(imagesNum, images))
   }
 
-  def show(id: Int) = IsAuthenticated { implicit rs =>
-    username =>
-      DB.withSession { implicit rs =>
-        Images.findById(id).map {
-          image =>
-            Ok(views.html.show(image))
-          }.getOrElse(NotFound(views.html.error("Cannot Find Image")))
-        }
+  def show(id: Int) = DBAction { implicit rs =>
+    Images.findById(id).map { image =>
+      Ok(views.html.show(image))
+    }.getOrElse(NotFound(views.html.error("Cannot Find Image")))
   }
 
   def edit(id :Int) = IsAuthenticated { implicit rs =>
